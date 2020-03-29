@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>My Bootstrap Project</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Custom Style Sheet-->
+    <link rel="stylesheet" href="css/customStyle.css">
+    <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="bootstrap/js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    	var min=1,max=90
+    	var picked_numbers=[]
+    	var actual_numbers_set=Array(90).fill(0).map((e,i)=>i+1)
+
+		$(document).ready(function(){
+			var html_text='';
+			var k=1;
+			for(var i=1;i<10;i++){
+				html_text+='<tr>'
+				for(var j=1;j<11;j++){
+					html_text+='<td>'+(k++)+'</td>'
+				}
+				html_text+='</tr>'
+			}
+			$('.table tbody').append(html_text);
+			//Housie Coding Starts here
+			$('#generate_num').click(function(){
+				if(picked_numbers.length==90){
+					responsiveVoice.speak('Heay ! all numbers are picked. Game over');
+				}else{
+					var sel_num=randNumber();
+					$('#selected_num').text(sel_num);
+					var row=Math.floor((sel_num/10))
+					var col=(sel_num%10)-1
+					if(col==-1)row=row-1
+					$('.table tr:eq('+row+')  td:eq('+col+')').addClass('sel-cell');
+					$('#picked_numbers').html(picked_numbers.join(', '))
+					responsiveVoice.speak($('#selected_num').text());
+				}
+			})
+		})
+		function randNumber(){
+			var gen_number = actual_numbers_set[(Math.random() * actual_numbers_set.length) | 0]
+			picked_numbers.push(gen_number);
+			actual_numbers_set.splice(actual_numbers_set.indexOf(gen_number),1);
+			return gen_number;
+		}
+    </script>
+    <style type="text/css">
+    	.sel-cell{
+    		background-color: blueviolet;
+			color: white;
+    	}
+    </style>
+    <script type="text/javascript">
+    	var pwd = window.prompt("enter password");
+    	$(document).ready(function(){
+    		if(pwd === "abc@123"){
+    			$(".pwdShow").show();
+    		}else{
+    			$(".pwdShow").hide();
+    		}
+    	});
+    </script>
+</head>
+<body>
+<div class="container">
+	<div class="jumbotron">
+	  <h1>Selected number is : <span id='selected_num'>0</span></h1>
+	  <p class="pwdShow">Numbers Order: <span id='picked_numbers'></span></p>
+	  <p class="pwdShow"><a class="btn btn-primary btn-lg" href="#" role="button" id="generate_num">Generate</a></p>
+	</div>
+	<div class="panel panel-primary pwdShow">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">Table of numbers</h3>
+	  </div>
+	  <div class="panel-body">
+	    <table class="table table-bordered table-responsive" id='number_grid'>
+			<tbody></tbody>
+	    </table>
+	  </div>
+	</div>
+</div>
+</body>
+</html>
